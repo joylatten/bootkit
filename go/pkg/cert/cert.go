@@ -80,7 +80,11 @@ func LoadSignatureDataDir(dirPath string) (*efi.SignatureData, error) {
 		return nil, err
 	}
 
-	return &efi.SignatureData{Owner: efi.GUID{}, Data: cert.Raw}, nil
+        owner, err := GUIDFromFile(filepath.Join(dirPath, "guid"))
+        if err != nil {
+            return nil, err
+        }
+	return &efi.SignatureData{Owner: owner, Data: cert.Raw}, nil
 }
 
 func LoadSignatureDataDirs(dirPaths ...string) ([]*efi.SignatureData, error) {
